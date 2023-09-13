@@ -2,10 +2,19 @@ window.boot = function () {
     var settings = window._CCSettings;
     window._CCSettings = undefined;
     var onProgress = null;
-
+    var checkLoad = false;
     var RESOURCES = cc.AssetManager.BuiltinBundleName.RESOURCES;
     var INTERNAL = cc.AssetManager.BuiltinBundleName.INTERNAL;
     var MAIN = cc.AssetManager.BuiltinBundleName.MAIN;
+
+    var preloadInMain = function () {
+        if (!checkLoad) {
+            console.log("preloadInMain");
+            Loading.preloadScene(() => { }, () => { });
+            checkLoad = true;
+        }
+    };
+
     function setLoadingDisplay() {
         // Loading splash scene
         var splash = document.getElementById('splash');
@@ -18,6 +27,7 @@ window.boot = function () {
             if (window.progressBar) {
                 progressBar(percent)
             }
+            preloadInMain();
         };
         splash.style.display = 'block';
         progressBar2.style.width = '0%';
@@ -26,7 +36,7 @@ window.boot = function () {
             splash.style.display = 'none';
         });
 
-    }
+    };
 
     var onStart = function () {
 
