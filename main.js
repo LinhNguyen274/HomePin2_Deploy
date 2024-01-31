@@ -10,13 +10,7 @@ window.boot = function () {
     var percentCurr = 0;
     var totalCurr = 0;
     var finishCrr = 0;
-    window.setWindowTopMargin = function(height) {
-        // Get game canvas element
-        const canvas = document.getElementById("GameCanvas"); 
-        console.log("@@@@@@@@@@@" , canvas)
-        // Set CSS margin-top property 
-        canvas.style.marginTop = `${height}px`; 
-       }
+
 
     var preloadInMain = function (scene) {
         if (!checkLoad) {
@@ -139,15 +133,15 @@ window.boot = function () {
             else if (settings.orientation === 'portrait') {
                 cc.view.setOrientation(cc.macro.ORIENTATION_PORTRAIT);
             }
-            // cc.view.enableAutoFullScreen([
-            //     cc.sys.BROWSER_TYPE_BAIDU,
-            //     cc.sys.BROWSER_TYPE_BAIDU_APP,
-            //     cc.sys.BROWSER_TYPE_WECHAT,
-            //     cc.sys.BROWSER_TYPE_MOBILE_QQ,
-            //     cc.sys.BROWSER_TYPE_MIUI,
-            //     cc.sys.BROWSER_TYPE_HUAWEI,
-            //     cc.sys.BROWSER_TYPE_UC,
-            // ].indexOf(cc.sys.browserType) < 0);
+            cc.view.enableAutoFullScreen([
+                cc.sys.BROWSER_TYPE_BAIDU,
+                cc.sys.BROWSER_TYPE_BAIDU_APP,
+                cc.sys.BROWSER_TYPE_WECHAT,
+                cc.sys.BROWSER_TYPE_MOBILE_QQ,
+                cc.sys.BROWSER_TYPE_MIUI,
+                cc.sys.BROWSER_TYPE_HUAWEI,
+                cc.sys.BROWSER_TYPE_UC,
+            ].indexOf(cc.sys.browserType) < 0);
         }
 
         // Limit downloading max concurrent task to 2,
@@ -231,4 +225,3 @@ if (window.jsb) {
     cc.macro.CLEANUP_IMAGE_CACHE = true;
     window.boot();
 }
-
