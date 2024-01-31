@@ -7,28 +7,95 @@ window.boot = function () {
     var INTERNAL = cc.AssetManager.BuiltinBundleName.INTERNAL;
     var MAIN = cc.AssetManager.BuiltinBundleName.MAIN;
 
-    var preloadInMain = function () {
+    var percentCurr = 0;
+    var totalCurr = 0;
+    var finishCrr = 0;
+    window.setWindowTopMargin = function(height) {
+        // Get game canvas element
+        const canvas = document.getElementById("GameCanvas"); 
+        console.log("@@@@@@@@@@@" , canvas)
+        // Set CSS margin-top property 
+        canvas.style.marginTop = `${height}px`; 
+       }
+
+    var preloadInMain = function (scene) {
         if (!checkLoad) {
             console.log("preloadInMain");
-            Loading.preloadScene(() => { }, () => { });
-            checkLoad = true;
-        }
-    };
+            Loading.preloadAssets(() => { }, () => { });
+            let currentLevelId = localStorage.getItem("hp_level");
+            let currentLevelPuzzle = localStorage.getItem("hp_level_puzzle");
+            let currentLevelNormal = localStorage.getItem("hp_level_normal");
+            let preload = [];
+            if (!currentLevelId) {
+                currentLevelNormal = 0;
+                currentLevelPuzzle = 0;
+            }
+            if (currentLevelId % 5 == 0 && currentLevelId != 0) {
+                preload = [`prefabs/levels/Level-${currentLevelPuzzle}`, "prefabs/skin/SkinPopup", "prefabs/rooms/popupRoom", "prefabs/daily/DailyPopup"];
+                // cc.resources.load(`prefabs/levels/Level-${currentLevelPuzzle}`, onProgress4, (error, assets) => {
+                //     console.log("Vao Day 1");
+                //     cc.resources.load("prefabs/skin/SkinPopup", onProgress1, (error, assets) => {
+                //         console.log("1111");
+                //         cc.resources.load("prefabs/rooms/popupRoom", onProgress2, (error, assets) => {
+                //             console.log("2222");
+                //             cc.resources.load("prefabs/daily/DailyPopup", onProgress3, (error, assets) => {
+                //                 // console.log("3333");
+                //                 successProcess(scene);
+                //             });
+                //         });
+                //     });
+                // });
+
+                // });
+            } else {
+                preload = [`prefabs/levels/Level-${currentLevelNormal}`, "prefabs/skin/SkinPopup", "prefabs/rooms/popupRoom", "prefabs/daily/DailyPopup"];
+                // cc.resources.load(`prefabs / levels / Level - ${currentLevelNormal}`, onProgress4, (error, assets) => {
+                //     console.log("Vao Day 2");
+                //     cc.assetManager.resources.load("prefabs/skin/SkinPopup", onProgress1, (error, assets) => {
+                //         console.log("1111");
+                //         cc.assetManager.resources.load("prefabs/rooms/popupRoom", onProgress2, (error, assets) => {
+                //             console.log("2222");
+                //             cc.assetManager.resources.load("prefabs/daily/DailyPopup", onProgress3, (error, assets) => {
+                //                 console.log("3333");
+                //                 successProcess(scene);
+                //             });
+                //         });
+                //     });
+                // });
+            }
+            console.log(preload);
+            cc.resources.load(preload, (finish, total, item) => {
+                let currPercent = 50 + 50 * finish / total;
+                if (window.progressBar) {
+                    progressBar(currPercent)
+                }
+            }, (error, assets) => {
+                successProcess(scene);
+                checkLoad = true;
+            })
+        };
+    }
 
     function setLoadingDisplay() {
         // Loading splash scene
         var splash = document.getElementById('splash');
         var progressBar2 = splash.querySelector('.progress-bar span');
+
         onProgress = function (finish, total) {
-            var percent = 100 * finish / total;
+            var percent = 50 * finish / total;
+            if (percentCurr < percent) {
+                percentCurr = percent;
+            } else {
+                percentCurr = percentCurr;
+            }
             window.getLoadingPerc = function () {
-                return percent
+                return percentCurr
             }
             if (window.progressBar) {
-                progressBar(percent)
+                progressBar(percentCurr)
             }
-            preloadInMain();
         };
+
         splash.style.display = 'block';
         progressBar2.style.width = '0%';
 
@@ -38,8 +105,26 @@ window.boot = function () {
 
     };
 
-    var onStart = function () {
+    var successProcess = function (scene) {
+        console.log("****RUN GAME*****");
+        cc.director.runSceneImmediate(scene);
+        if (cc.sys.isBrowser) {
+            // show canvas
+            var canvas = document.getElementById('GameCanvas');
+            canvas.style.visibility = '';
+            var div = document.getElementById('GameDiv');
+            if (div) {
+                div.style.backgroundImage = '';
+            }
+            cc.sys.localStorage.setItem("firstTime", JSON.stringify(true));
+            refreshStickyBannerAd();
+            StickyBannerInstance = window?.GlanceGamingAdInterface?.showStickyBannerAd(StickyObj, bannerCallbacks);
+            replayInstance = window.GlanceGamingAdInterface.loadRewardedAd(replayObj, rewardedCallbacks);
+            rewardInstance = window.GlanceGamingAdInterface.loadRewardedAd(rewardObj, rewardedCallbacks);
+        }
+    };
 
+    var onStart = function () {
         cc.view.enableRetina(true);
         cc.view.resizeWithBrowserSize(true);
 
@@ -81,26 +166,10 @@ window.boot = function () {
         bundle.loadScene(launchScene, null, onProgress,
             function (err, scene) {
                 if (!err) {
-                    cc.director.runSceneImmediate(scene);
-                    if (cc.sys.isBrowser) {
-                        // show canvas
-                        var canvas = document.getElementById('GameCanvas');
-                        canvas.style.visibility = '';
-                        var div = document.getElementById('GameDiv');
-                        if (div) {
-                            div.style.backgroundImage = '';
-                        }
-                        console.log('Success to load scene: ' + launchScene);
-                        cc.sys.localStorage.setItem("firstTime", JSON.stringify(true));
-                        refreshStickyBannerAd();
-                        StickyBannerInstance = window?.GlanceGamingAdInterface?.showStickyBannerAd(StickyObj, bannerCallbacks);
-                        replayInstance = window.GlanceGamingAdInterface.loadRewardedAd(replayObj, rewardedCallbacks);
-                        rewardInstance = window.GlanceGamingAdInterface.loadRewardedAd(rewardObj, rewardedCallbacks);
-                    }
+                    preloadInMain(scene);
                 }
             }
         );
-
     };
 
     var option = {
@@ -137,6 +206,7 @@ window.boot = function () {
     for (var i = 0; i < bundleRoot.length; i++) {
         cc.assetManager.loadBundle(bundleRoot[i], cb);
     }
+
 };
 
 if (window.jsb) {
@@ -161,3 +231,4 @@ if (window.jsb) {
     cc.macro.CLEANUP_IMAGE_CACHE = true;
     window.boot();
 }
+
