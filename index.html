@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Wood & Screw Puzzle</title>
+  <title>Home Pin2</title>
 
   <!--http://www.html5rocks.com/en/mobile/mobifying/-->
   <meta name="viewport"
@@ -51,8 +51,8 @@
     </div>
   </div>
 
-  <script src="src/settings.c8b4d.js" charset="utf-8"></script>
-  <script src="main.bcb94.js" charset="utf-8"></script>
+  <script src="src/settings.068ab.js" charset="utf-8"></script>
+  <script src="main.92c45.js" charset="utf-8"></script>
 
   <script type="text/javascript">
     (function () {
@@ -60,12 +60,11 @@
       if (typeof VConsole !== 'undefined') {
         window.vConsole = new VConsole();
       }
-      // if (screen.orientation && screen.orientation.lock) {
-      //   screen.orientation.lock('portrait').catch(function (error) {
-      //     console.error('Locking orientation failed:', error);
-      //   });
-      // }
-
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('portrait').catch(function (error) {
+          console.error('Locking orientation failed:', error);
+        });
+      }
       var debug = window._CCSettings.debug;
       var splash = document.getElementById('splash');
       splash.style.display = 'block';
