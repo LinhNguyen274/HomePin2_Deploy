@@ -4,26 +4,12 @@
 <head>
   <meta charset="utf-8">
 
-  <title>HomePin2</title>
+  <title>Wood & Screw Puzzle</title>
 
   <!--http://www.html5rocks.com/en/mobile/mobifying/-->
   <meta name="viewport"
     content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1" />
-  <!--======================Jquery===========================-->
-  <script src="jquery-3.4.1.min.js"></script>
 
-  <script type="text/javascript" src="./ads.js"></script>
-
-  <!--======================Sticky Ads===========================-->
-  <script type="text/javascript" src="./stickyBanner.js"></script>
-  <link rel="stylesheet" href="./stickyBanner.css">
-
-  <script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
-
-  <!--======================RewardedAds===========================-->
   <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -51,23 +37,22 @@
 
   <!--<link rel="apple-touch-icon" href=".png" />-->
   <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+  <link rel="stylesheet" type="text/css" href="style-mobile.cfbf0.css" />
+  <link rel="icon" href="favicon.8de18.ico" />
+  <link rel="stylesheet" href="./stickyBanner.198cd.css">
 
-  <link rel="stylesheet" type="text/css" href="style-mobile.css" />
-  <link rel="icon" href="favicon.ico" />
 </head>
 
 <body>
-  <script>addLoader();</script>
-  <canvas id="GameCanvas" oncontextmenu="event.preventDefault()"></canvas>
+  <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
   <div id="splash">
     <div class="progress-bar stripes">
       <span style="width: 0%"></span>
     </div>
   </div>
 
-  <script src="src/settings.js" charset="utf-8"></script>
-
-  <script src="main.js" charset="utf-8"></script>
+  <script src="src/settings.c8b4d.js" charset="utf-8"></script>
+  <script src="main.bcb94.js" charset="utf-8"></script>
 
   <script type="text/javascript">
     (function () {
@@ -75,6 +60,11 @@
       if (typeof VConsole !== 'undefined') {
         window.vConsole = new VConsole();
       }
+      // if (screen.orientation && screen.orientation.lock) {
+      //   screen.orientation.lock('portrait').catch(function (error) {
+      //     console.error('Locking orientation failed:', error);
+      //   });
+      // }
 
       var debug = window._CCSettings.debug;
       var splash = document.getElementById('splash');
@@ -93,7 +83,7 @@
         document.body.appendChild(domScript);
       }
 
-      loadScript(debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js', function () {
+      loadScript(debug ? 'cocos2d-js.js' : 'cocos2d-js-min.e5f1f.js', function () {
         if (CC_PHYSICS_BUILTIN || CC_PHYSICS_CANNON) {
           loadScript(debug ? 'physics.js' : 'physics-min.js', window.boot);
         }
@@ -102,26 +92,12 @@
         }
       });
     })();
-    window.onload = function () {
-      console.log('load');
-      function checkSound() {
-        try {
-          var mute = location.search.substring(1).split("&")?.find((a) => { return a.startsWith('mute') })?.split("=")[1];
-
-          if (mute === 'true') {
-            window.enableSound(false);
-          } else {
-            window.enableSound(true);
-          }
-        } catch (error) {
-          setTimeout(checkSound, 100);
-        }
-      }
-
-      checkSound();
-
-    };
   </script>
+  <div id="bannerOverlay">
+    <div id="CONTAINER_ID_TO_PUT_AD_IN">
+
+    </div>
+  </div>
 </body>
 
 </html>
